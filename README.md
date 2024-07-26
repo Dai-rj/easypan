@@ -1,1 +1,1 @@
-# easypan
+EasyPan
