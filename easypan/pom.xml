@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 定义项目元数据，包括项目结构、依赖、构建信息等 -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!-- 继承Spring Boot的starter parent，以获得默认的构建配置 -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.3.2</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <!-- 项目唯一标识，包括组ID、artifact ID和版本 -->
+  <groupId>com.easypan</groupId>
+  <artifactId>easypan</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+  <!-- 项目名称和描述 -->
+  <name>easypan</name>
+  <description>easypan</description>
+
+  <!-- 项目依赖，用于声明项目需要的第三方库 -->
+  <dependencies>
+    <!-- Spring Boot的Web starter，包含Web相关的依赖和配置 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- Spring Boot的邮件starter，用于发送邮件 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+
+    <!-- Spring Boot的Redis starter，用于使用Redis作为缓存或消息中间件 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+
+    <!-- MyBatis与Spring Boot的集成，用于简化MyBatis的使用 -->
+    <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter</artifactId>
+      <version>3.0.3</version>
+    </dependency>
+
+
+    <!-- MySQL驱动，用于连接和操作MySQL数据库 -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.4.0</version>
+    </dependency>
+
+
+    <!-- AspectJ weaving支持，用于AOP编程 -->
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>1.9.22.1</version>
+    </dependency>
+    <!-- FastJSON，用于JSON序列化和反序列化 -->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>2.0.52</version>
+    </dependency>
+
+    <!-- Apache Commons Lang，提供一些Java语言功能的扩展 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.15.0</version>
+    </dependency>
+
+    <!-- Commons Codec，提供各种编码和解码功能 -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.17.1</version>
+    </dependency>
+
+    <!-- Commons IO，提供一些IO操作的工具类 -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.16.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.34</version>
+    </dependency>
+  </dependencies>
+
+  <!-- 项目构建配置，包括插件的使用和配置 -->
+  <build>
+    <plugins>
+      <!-- Spring Boot的Maven插件，用于打包和运行Spring Boot应用 -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.3.2</version>
+        <executions>
+          <!-- 执行repackage目标，生成可执行的JAR包 -->
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!-- 指定应用的主类 -->
+          <mainClass>com.easypan.EasyPanApplication</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
