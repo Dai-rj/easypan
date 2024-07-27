@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Logback 配置文件 -->
+<configuration scan="true" scanPeriod="10 minutes">
+    <!-- ConsoleAppender 配置，用于向控制台输出日志 -->
+    <appender name="stdot" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- PatternLayout 设置日志输出格式 -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!-- 定义日志输出的样式 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,GMT+8} [%p][%c][%M][%L]-> %m%n</pattern>
+        </layout>
+    </appender>
+
+    <!-- 从Spring环境中读取项目文件夹路径 -->
+    <springProperty scope="context" name="log.path" source="project.folder"/>
+    <!-- 从Spring环境中读取根日志级别 -->
+    <springProperty scope="context" name="log.root.level" source="log.root.level"/>
+
+    <!-- 定义日志文件夹名称 -->
+    <property name="LOG_FOLDER" value="logs"/>
+    <!-- 定义日志文件名称 -->
+    <property name="LOG_FILE_NAME" value="easypan.log"/>
+
+    <!-- RollingFileAppender 配置，用于滚动日志文件 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的路径 -->
+        <file>${log.path}/${LOG_FOLDER}/${LOG_FILE_NAME}</file>
+        <!-- TimeBasedRollingPolicy 配置，基于时间的滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 文件命名模式，包括日期和序号 -->
+            <FileNamePattern>${log.path}/${LOG_FOLDER}/${LOG_FILE_NAME}.%d{yyyyMMdd}.%i</FileNamePattern>
+            <!-- 启动时清理历史日志 -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <!-- SizeAndTimeBasedFNATP 配置，基于时间和大小的滚动策略 -->
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 最大文件大小 -->
+                <MaxFileSize>20MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+            <!-- 保存的历史日志文件数量 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- Encoder 配置，用于编码和日志输出格式 -->
+        <encoder>
+            <!-- 字符集 -->
+            <charset>utf-8</charset>
+            <!-- 日志输出样式 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,GMT+8} [%p][%c][%M][%L]-> %m%n</pattern>
+        </encoder>
+        <!-- 是否追加到现有日志文件 -->
+        <append>false</append>
+        <!-- 是否谨慎模式，防止日志丢失 -->
+        <prudent>false</prudent>
+    </appender>
+
+    <!-- Root logger 配置，设置全局日志级别 -->
+    <root level="${log.root.level}">
+        <!-- 引用 ConsoleAppender -->
+        <appender-ref ref="stdot"/>
+        <!-- 引用 RollingFileAppender -->
+        <appender-ref ref="file"/>
+    </root>
+
+</configuration>
