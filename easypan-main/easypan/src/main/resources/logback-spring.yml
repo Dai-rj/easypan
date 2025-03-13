@@ -1,0 +1,57 @@
+# Logback 配置文件
+
+configuration:
+  # 启用自动扫描配置文件的变化，默认关闭。如果开启，则当配置文件发生变化时会重新加载配置。
+  scan: true
+
+  # 自动扫描的时间间隔，默认是 1 分钟。这里设置为每 10 分钟扫描一次。
+  scanPeriod: "10 minutes"
+
+  appender:
+    # 控制台输出日志的配置
+    - name: stdot  # 定义一个名为 stdot 的 appender
+      class: ch.qos.logback.core.ConsoleAppender  # 使用控制台输出
+      layout:
+        class: ch.qos.logback.classic.PatternLayout  # 设置日志格式化器
+        pattern: "%d{yyyy-MM-dd HH:mm:ss,GMT+8} [%p][%c][%M][%L]-> %m%n"  # 日志输出格式，包含时间、级别、类名、方法名、行号和消息
+
+    # 文件输出日志的配置
+    - name: file  # 定义一个名为 file 的 appender
+      class: ch.qos.logback.core.rolling.RollingFileAppender  # 使用滚动文件输出
+      file: "${log.path}/${LOG_FOLDER}/${LOG_FILE_NAME}"  # 日志文件路径，使用变量替换
+      rollingPolicy:
+        class: ch.qos.logback.core.rolling.TimeBasedRollingPolicy  # 按时间滚动策略
+        fileNamePattern: "${log.path}/${LOG_FOLDER}/${LOG_FILE_NAME}.%d{yyyyMMdd}.%i"  # 滚动后的文件命名模式
+        cleanHistoryOnStart: true  # 在启动时清理历史日志文件
+        maxHistory: 30  # 保留最多 30 天的日志文件
+        timeBasedFileNamingAndTriggeringPolicy:
+          class: ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP  # 按时间和大小滚动策略
+          maxFileSize: "20MB"  # 单个日志文件最大为 20MB
+      encoder:
+        charset: utf-8  # 编码格式为 UTF-8
+        pattern: "%d{yyyy-MM-dd HH:mm:ss,GMT+8} [%p][%c][%M][%L]-> %m%n"  # 日志输出格式，同控制台配置
+      append: false  # 不追加到现有文件中，而是覆盖
+      prudent: false  # 是否启用安全模式（多进程写入时使用）
+
+  springProperty:
+    # 从 Spring 环境中获取属性值，并将其注入到 Logback 中
+    - scope: context  # 作用域为上下文
+      name: log.path  # 属性名称
+      source: project.folder  # 来源属性名称
+    - scope: context  # 作用域为上下文
+      name: log.root.level  # 属性名称
+      source: log.root.level  # 来源属性名称
+
+  property:
+    # 定义自定义属性
+    - name: LOG_FOLDER  # 属性名称
+      value: logs  # 属性值，日志文件夹名称
+    - name: LOG_FILE_NAME  # 属性名称
+      value: easypan.log  # 属性值，日志文件名称
+
+  root:
+    # 根日志级别配置
+    level: "${log.root.level}"  # 从 Spring 环境中获取根日志级别
+    appender-ref:
+      - ref: stdot  # 引用控制台输出的 appender
+      - ref: file  # 引用文件输出的 appender
